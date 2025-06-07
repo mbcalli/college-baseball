@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS batting (
+CREATE TABLE IF NOT EXISTS raw_batting (
     name TEXT,
     team TEXT,
     age INT,

@@ -14,7 +14,10 @@ dependencies = [
     "pytest>=8.3.4",
     "setuptools>=75.8.0",
     "wheel>=0.45.1",
-    "uv>=0.5.31"
+    "ipykernel",
+    "plotly",
+    "uv>=0.5.31",
+    "nbformat>=4.2.0"
 ]
 
 [tool.pytest.ini_options]
