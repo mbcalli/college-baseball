@@ -3,10 +3,10 @@ import pandas as pd
 import sqlite3
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from src.college_baseball.helper import *
+from helper import *
 import json
 
-with open("src/college_baseball/players.json", "r") as file:
+with open("players.json", "r") as file:
     players = json.load(file)
 
 st.title("2025 College Baseball Batting Stats")
@@ -23,7 +23,7 @@ player_name = st.selectbox(
 )
 
 if st.button("Show"):
-    connection = sqlite3.connect("src/college_baseball/baseball.db")
+    connection = sqlite3.connect("baseball.db")
     raw_batting = pd.read_sql(f"SELECT * FROM raw_batting WHERE name = '{player_name}'", connection)
     processed_batting = pd.read_sql(f"SELECT * FROM processed_batting WHERE name = '{player_name}'", connection)
     connection.close()
