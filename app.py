@@ -1,15 +1,12 @@
 import streamlit as st
 
-pages = {
-    "Player Level": [
-        st.Page("batting_individual.py", title="Batting"),
-        st.Page("pitching_individual.py", title="Pitching"),
-    ],
-    "Team Level": [
-        st.Page("batting_team.py", title="Batting"),
-        st.Page("pitching_team.py", title="Pitching"),
-    ]
-}
+pages = [
+    st.Page("batting_individual.py", title="Individual Batting"),
+    st.Page("pitching_individual.py", title="Individual Pitching"),
+    st.Page("batting_team.py", title="Team Lineup"),
+    st.Page("pitching_team.py", title="Team Bullpen")
+]
+
 
 pg = st.navigation(pages)
 pg.run()

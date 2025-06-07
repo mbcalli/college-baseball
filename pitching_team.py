@@ -39,3 +39,5 @@ if st.button("Show", key="pitching_show_team"):
     fig = get_team_stat_pitching_fig(team_name, pitching_metrics[stat_name], stat_name, min_ip=min_ip)
 
     st.plotly_chart(fig, config={"staticPlot": True})
+
+    st.caption("National percentiles shown within bars. 99 corresponds to the 99th percentile (GREAT)")

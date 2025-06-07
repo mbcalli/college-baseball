@@ -34,6 +34,8 @@ if st.button("Show", key="pitching_show_ind"):
 
     st.plotly_chart(fig, config={"staticPlot": True})
 
+    st.caption("National percentiles shown within bars. 99 corresponds to the 99th percentile (GREAT)")
+
     with open("pitching_metrics.json", "r") as file:
         metrics = json.load(file)
 

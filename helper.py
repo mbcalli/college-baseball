@@ -149,21 +149,28 @@ def get_player_batting_figure(player_name: str, processed_batting: pd.DataFrame,
         barmode="overlay",
         plot_bgcolor="white",
         paper_bgcolor="white",
-        # margin=dict(l=0, r=0, t=0, b=0),
-        xaxis=dict(
-            visible=False
-        ),
+        margin=dict(l=0, r=0),
         yaxis=dict(
             showgrid=False
-        ),
-        xaxis2=dict(
-            range=[0,1],
-            visible=False
         ),
         yaxis2=dict(
             showgrid=False
         ),
         title=f"Batting - {player_name}"
+    )
+
+    fig.update_xaxes(
+        row=1, col=1,
+        tickmode="array",
+        tickvals=[10, 50, 90],
+        ticktext=["POOR", "AVERAGE", "GREAT"],
+        side="top"
+    )
+
+    # Hide second subplot x-axis ticks/labels if desired
+    fig.update_xaxes(
+        row=1, col=2,
+        showticklabels=False
     )
 
     return fig
@@ -286,20 +293,27 @@ def get_player_pitching_figure(player_name: str, processed_pitching: pd.DataFram
         plot_bgcolor="white",
         paper_bgcolor="white",
         # margin=dict(l=0, r=0, t=0, b=0),
-        xaxis=dict(
-            visible=False
-        ),
         yaxis=dict(
             showgrid=False
-        ),
-        xaxis2=dict(
-            range=[0,1],
-            visible=False
         ),
         yaxis2=dict(
             showgrid=False
         ),
         title=f"Pitching - {player_name}"
+    )
+
+    fig.update_xaxes(
+        row=1, col=1,
+        tickmode="array",
+        tickvals=[10, 50, 90],
+        ticktext=["POOR", "AVERAGE", "GREAT"],
+        side="top"
+    )
+
+    # Hide second subplot x-axis ticks/labels if desired
+    fig.update_xaxes(
+        row=1, col=2,
+        showticklabels=False
     )
 
     return fig
@@ -394,20 +408,27 @@ def get_team_stat_batting_fig(team: str, stat: str, stat_fmt: str, min_pa: int =
         plot_bgcolor="white",
         paper_bgcolor="white",
         # margin=dict(l=0, r=0, t=0, b=0),
-        xaxis=dict(
-            visible=False
-        ),
         yaxis=dict(
             showgrid=False
-        ),
-        xaxis2=dict(
-            range=[0,1],
-            visible=False
         ),
         yaxis2=dict(
             showgrid=False
         ),
         title=fr"Team: {team} | Stat: {stat_fmt}"
+    )
+
+    fig.update_xaxes(
+        row=1, col=1,
+        tickmode="array",
+        tickvals=[10, 50, 90],
+        ticktext=["POOR", "AVERAGE", "GREAT"],
+        side="top"
+    )
+
+    # Hide second subplot x-axis ticks/labels if desired
+    fig.update_xaxes(
+        row=1, col=2,
+        showticklabels=False
     )
 
     return fig
@@ -502,20 +523,27 @@ def get_team_stat_pitching_fig(team: str, stat: str, stat_fmt: str, min_ip: int 
         plot_bgcolor="white",
         paper_bgcolor="white",
         # margin=dict(l=0, r=0, t=0, b=0),
-        xaxis=dict(
-            visible=False
-        ),
         yaxis=dict(
             showgrid=False
-        ),
-        xaxis2=dict(
-            range=[0,1],
-            visible=False
         ),
         yaxis2=dict(
             showgrid=False
         ),
         title=fr"Team: {team} | Stat: {stat_fmt}"
+    )
+
+    fig.update_xaxes(
+        row=1, col=1,
+        tickmode="array",
+        tickvals=[10, 50, 90],
+        ticktext=["POOR", "AVERAGE", "GREAT"],
+        side="top"
+    )
+
+    # Hide second subplot x-axis ticks/labels if desired
+    fig.update_xaxes(
+        row=1, col=2,
+        showticklabels=False
     )
 
     return fig
