@@ -31,3 +31,9 @@ if st.button("Show"):
     fig = get_player_batting_figure(player_name, processed_batting, raw_batting)
 
     st.plotly_chart(fig)
+
+    with open("metrics.json", "r") as file:
+        metrics = json.load(file)
+
+    df = pd.DataFrame(list(metrics.items()), columns=["Metric", "Description"])
+    st.dataframe(df, use_container_width=True, hide_index=True)
