@@ -1,0 +1,31 @@
+[project]
+name = "college-baseball"
+version = "0.0.1"
+description = "College Baseball Project"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "pandas>2.2.0",
+    "matplotlib==3.9.2",
+    "numpy==1.26.4",
+    "scikit-learn==1.5.2",
+    "pydantic==2.9.2",
+    "seaborn>=0.13.2",
+    "pre-commit>=4.1.0",
+    "pytest>=8.3.4",
+    "setuptools>=75.8.0",
+    "wheel>=0.45.1",
+    "uv>=0.5.31"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+filterwarnings = []
+
+[build-system]
+requires = ["setuptools>=72.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["college_baseball"]
