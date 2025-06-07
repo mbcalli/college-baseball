@@ -35,7 +35,7 @@ with batting_inv_tab:
 
         fig = get_player_batting_figure(batter_name, processed_batting, raw_batting)
 
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, config={"staticPlot": True})
 
         with open("batting_metrics.json", "r") as file:
             metrics = json.load(file)
@@ -70,7 +70,7 @@ with pitching_inv_tab:
 
         fig = get_player_pitching_figure(pitcher_name, processed_pitching, raw_pitching)
 
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, config={"staticPlot": True})
 
         with open("pitching_metrics.json", "r") as file:
             metrics = json.load(file)
@@ -121,7 +121,7 @@ with batting_team_tab:
 
         fig = get_team_stat_batting_fig(team_name, batting_metrics[stat_name], stat_name, min_pa=min_pa)
 
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, config={"staticPlot": True})
 
 with pitching_team_tab:
 
@@ -157,4 +157,4 @@ with pitching_team_tab:
 
         fig = get_team_stat_pitching_fig(team_name, pitching_metrics[stat_name], stat_name, min_ip=min_ip)
 
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, config={"staticPlot": True})
