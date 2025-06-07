@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS batting (
+    name TEXT,
+    team TEXT,
+    age INT,
+    pa INT,
+    bb_rate REAL,
+    k_rate REAL,
+    bb_per_k REAL,
+    avg REAL,
+    obp REAL,
+    slg REAL,
+    ops REAL,
+    iso REAL,
+    spd REAL,
+    babip REAL,
+    wsb REAL,
+    wrc REAL,
+    wraa REAL,
+    woba REAL,
+    wrc_plus REAL,
+    alt_name TEXT,
+    id TEXT PRIMARY KEY
+)
