@@ -6,7 +6,7 @@ from plotly.subplots import make_subplots
 from helper import *
 import json
 
-with open("players.json", "r") as file:
+with open("batters.json", "r") as file:
     players = json.load(file)
 
 st.title("2025 College Baseball Batting Stats")
@@ -32,7 +32,7 @@ if st.button("Show"):
 
     st.plotly_chart(fig)
 
-    with open("metrics.json", "r") as file:
+    with open("batting_metrics.json", "r") as file:
         metrics = json.load(file)
 
     df = pd.DataFrame(list(metrics.items()), columns=["Metric", "Description"])
