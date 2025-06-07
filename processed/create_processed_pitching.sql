@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS processed_pitching (
+    id TEXT PRIMARY KEY,
+    name TEXT,
+    team TEXT,
+    ip_percentile INT,
+    k_per_nine_percentile INT,
+    bb_per_nine_percentile INT,
+    k_per_bb_percentile INT,
+    hr_per_nine_percentile INT,
+    k_rate_percentile INT,
+    bb_rate_percentile INT,
+    k_minus_bb_rate_percentile INT,
+    avg_percentile INT,
+    whip_percentile INT,
+    babip_percentile INT,
+    lob_rate_percentile INT,
+    era_percentile INT,
+    fip_percentile INT,
+    e_minus_f_percentile INT
+)

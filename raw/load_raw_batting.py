@@ -6,7 +6,7 @@ connection = sqlite3.connect("baseball.db")
 cursor = connection.cursor()
 
 # Load data file
-data = pd.read_csv("raw/fangraphs-college-leaderboard.csv")
+data = pd.read_csv("raw/batting.csv")
 
 # Remove column that's entirely null
 data = data.drop(columns=["MLBAMID"])
