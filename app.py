@@ -1,11 +1,11 @@
 import streamlit as st
 
 pages = [
-    st.Page("batting_individual.py", title="Individual Batting"),
-    st.Page("pitching_individual.py", title="Individual Pitching"),
-    st.Page("batting_team.py", title="Team Lineup"),
-    st.Page("pitching_team.py", title="Team Bullpen"),
-    st.Page("help.py", title="Help")
+    st.Page("pages/batting_individual.py", title="Individual Batting"),
+    st.Page("pages/pitching_individual.py", title="Individual Pitching"),
+    st.Page("pages/batting_team.py", title="Team Lineup"),
+    st.Page("pages/pitching_team.py", title="Team Bullpen"),
+    st.Page("pages/help.py", title="Help")
 ]
 
 

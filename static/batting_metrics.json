@@ -1,0 +1,18 @@
+{
+  "PA": "Plate appearances",
+  "BB%": "Walk rate (BB/PA)",
+  "K%": "Strikeout rate (K/PA)",
+  "BB/K": "Walks per strikeout",
+  "AVG": "Batting average (H/AB)",
+  "OBP": "On-base percentage",
+  "SLG": "Slugging percentage",
+  "OPS": "OBP + SLG",
+  "ISO": "Isolated power (SLG - AVG)",
+  "Spd": "Speed score (baserunning metric)",
+  "BABIP": "Batting average on balls in play",
+  "wSB": "Weighted stolen base runs",
+  "wRC": "Weighted runs created",
+  "wRAA": "Weighted runs above average",
+  "wOBA": "Weighted on-base average",
+  "wRC+": "League-adjusted wRC (100 = average)"
+}

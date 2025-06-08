@@ -1,0 +1,18 @@
+{
+    "AVG": "avg",
+    "BABIP": "babip",
+    "BB/K": "bb_per_k",
+    "BB%": "bb_rate",
+    "ISO": "iso",
+    "K%": "k_rate",
+    "OBP": "obp",
+    "OPS": "ops",
+    "PA": "pa",
+    "SLG": "slg",
+    "Spd": "spd",
+    "wOBA": "woba",
+    "wRAA": "wraa",
+    "wRC": "wrc",
+    "wRC+": "wrc_plus",
+    "wSB": "wsb"
+}

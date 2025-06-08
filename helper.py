@@ -30,9 +30,9 @@ def value_to_string(value):
     if value > 1: return f"{value:0.2f}"
     return f"{value:0.3f}"
 
-def get_batter_df(player_name: str, processed_batting: pd.DataFrame, raw_batting: pd.DataFrame) -> pd.DataFrame:
+def get_batter_df(player_name: str, silver_adv_batting: pd.DataFrame, bronze_adv_batting: pd.DataFrame) -> pd.DataFrame:
 
-    player_processed = processed_batting[processed_batting["name"] == player_name]
+    player_processed = silver_adv_batting[silver_adv_batting["name"] == player_name]
     player_processed = player_processed.drop(columns=["id", "name", "team"]).T.reset_index()
     player_processed.columns = ["stat", "perc"]
     player_processed["stat"] = [
@@ -54,7 +54,7 @@ def get_batter_df(player_name: str, processed_batting: pd.DataFrame, raw_batting
         "wRC+"
     ]
 
-    player_raw = raw_batting[raw_batting["name"] == player_name]
+    player_raw = bronze_adv_batting[bronze_adv_batting["name"] == player_name]
     player_raw = player_raw.drop(columns=["id", "name", "team", "age", "alt_name"]).T.reset_index()
     player_raw.columns = ["stat", "value"]
     player_raw["stat"] = [
@@ -86,9 +86,9 @@ def get_batter_df(player_name: str, processed_batting: pd.DataFrame, raw_batting
 
     return player_df
 
-def get_player_batting_figure(player_name: str, processed_batting: pd.DataFrame, raw_batting: pd.DataFrame):
+def get_player_batting_figure(player_name: str, silver_adv_batting: pd.DataFrame, bronze_adv_batting: pd.DataFrame):
 
-    player_df = get_batter_df(player_name, processed_batting, raw_batting)
+    player_df = get_batter_df(player_name, silver_adv_batting, bronze_adv_batting)
 
     fig = make_subplots(
         rows=1,
@@ -175,9 +175,9 @@ def get_player_batting_figure(player_name: str, processed_batting: pd.DataFrame,
 
     return fig
 
-def get_pitcher_df(player_name: str, processed_pitching: pd.DataFrame, raw_pitching: pd.DataFrame) -> pd.DataFrame:
+def get_pitcher_df(player_name: str, silver_adv_pitching: pd.DataFrame, bronze_adv_pitching: pd.DataFrame) -> pd.DataFrame:
 
-    player_processed = processed_pitching[processed_pitching["name"] == player_name]
+    player_processed = silver_adv_pitching[silver_adv_pitching["name"] == player_name]
     player_processed = player_processed.drop(columns=["id", "name", "team"]).T.reset_index()
     player_processed.columns = ["stat", "perc"]
     player_processed["stat"] = [
@@ -198,7 +198,7 @@ def get_pitcher_df(player_name: str, processed_pitching: pd.DataFrame, raw_pitch
         "ERA-FIP"
     ]
 
-    player_raw = raw_pitching[raw_pitching["name"] == player_name]
+    player_raw = bronze_adv_pitching[bronze_adv_pitching["name"] == player_name]
     player_raw = player_raw.drop(columns=["id", "name", "team", "age", "alt_name"]).T.reset_index()
     player_raw.columns = ["stat", "value"]
     player_raw["stat"] = [
@@ -229,9 +229,9 @@ def get_pitcher_df(player_name: str, processed_pitching: pd.DataFrame, raw_pitch
 
     return player_df
 
-def get_player_pitching_figure(player_name: str, processed_pitching: pd.DataFrame, raw_pitching: pd.DataFrame):
+def get_player_pitching_figure(player_name: str, silver_adv_pitching: pd.DataFrame, bronze_adv_pitching: pd.DataFrame):
 
-    player_df = get_pitcher_df(player_name, processed_pitching, raw_pitching)
+    player_df = get_pitcher_df(player_name, silver_adv_pitching, bronze_adv_pitching)
 
     fig = make_subplots(
         rows=1,
@@ -321,8 +321,8 @@ def get_player_pitching_figure(player_name: str, processed_pitching: pd.DataFram
 def get_team_stat_batting_df(team: str, stat: str, stat_fmt: str, min_pa: int = None) -> pd.DataFrame:
 
     connection = sqlite3.connect("baseball.db")
-    raw_team = pd.read_sql(f"SELECT * FROM raw_batting where team = '{team}'", connection)
-    processed_team = pd.read_sql(f"SELECT * FROM processed_batting where team = '{team}'", connection)
+    raw_team = pd.read_sql(f"SELECT * FROM bronze_adv_batting where team = '{team}'", connection)
+    processed_team = pd.read_sql(f"SELECT * FROM silver_adv_batting where team = '{team}'", connection)
     connection.close()
 
     if min_pa:
@@ -436,8 +436,8 @@ def get_team_stat_batting_fig(team: str, stat: str, stat_fmt: str, min_pa: int =
 def get_team_stat_pitching_df(team: str, stat: str, stat_fmt: str, min_ip: int = None) -> pd.DataFrame:
 
     connection = sqlite3.connect("baseball.db")
-    raw_team = pd.read_sql(f"SELECT * FROM raw_pitching where team = '{team}'", connection)
-    processed_team = pd.read_sql(f"SELECT * FROM processed_pitching where team = '{team}'", connection)
+    raw_team = pd.read_sql(f"SELECT * FROM bronze_adv_pitching where team = '{team}'", connection)
+    processed_team = pd.read_sql(f"SELECT * FROM silver_adv_pitching where team = '{team}'", connection)
     connection.close()
 
     if min_ip:

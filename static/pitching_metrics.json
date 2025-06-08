@@ -1,0 +1,17 @@
+{
+  "IP": "Innings pitched",
+  "K/9": "Strikeouts per nine innings",
+  "BB/9": "Walks per nine innings",
+  "K/BB": "Strikeouts per walk",
+  "HR/9": "Home runs allowed per nine innings",
+  "K%": "Strikeout rate (per batter faced)",
+  "BB%": "Walk rate (per batter faced)",
+  "K-BB%": "Strikeout rate minus walk rate",
+  "AVG": "Opponent batting average",
+  "WHIP": "Walks plus hits per inning pitched",
+  "BABIP": "Batting average on balls in play (against)",
+  "LOB%": "Left-on-base percentage",
+  "ERA": "Earned run average",
+  "FIP": "Fielding Independent Pitching",
+  "ERA-FIP": "Difference between ERA and FIP"
+}
