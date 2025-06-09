@@ -1,0 +1,21 @@
+{
+  "W": "Wins",
+  "L": "Losses",
+  "ERA": "Earned run average",
+  "G": "Games pitched",
+  "GS": "Games started",
+  "CG": "Complete games",
+  "ShO": "Shutouts",
+  "SV": "Saves",
+  "IP": "Innings pitched",
+  "TBF": "Total batters faced",
+  "H": "Hits allowed",
+  "R": "Runs allowed",
+  "ER": "Earned runs allowed",
+  "HR": "Home runs allowed",
+  "BB": "Walks issued (Base on balls)",
+  "HBP": "Hit batters",
+  "WP": "Wild pitches",
+  "BK": "Balks",
+  "SO": "Strikeouts"
+}

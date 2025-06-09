@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bronze_adv_pitching (
+CREATE TABLE IF NOT EXISTS bronze_std_pitching (
     name TEXT,
     team TEXT,
     age INT,

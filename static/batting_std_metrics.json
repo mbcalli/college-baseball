@@ -1,0 +1,21 @@
+{
+  "G": "Games played",
+  "AB": "At-bats",
+  "PA": "Plate appearances",
+  "H": "Hits",
+  "1B": "Singles",
+  "2B": "Doubles",
+  "3B": "Triples",
+  "HR": "Home runs",
+  "R": "Runs scored",
+  "RBI": "Runs batted in",
+  "BB": "Walks (Base on balls)",
+  "SO": "Strikeouts",
+  "HBP": "Hit by pitch",
+  "SF": "Sacrifice flies",
+  "SH": "Sacrifice hits (bunts)",
+  "GDP": "Grounded into double plays",
+  "SB": "Stolen bases",
+  "CS": "Caught stealing",
+  "AVG": "Batting average (H/AB)"
+}

@@ -10,7 +10,9 @@ import json
 with open("static/batters.json", "r") as file:
     batters = json.load(file)
 
-st.title("2025 College Baseball Batting Stats")
+st.title("2025 Team Lineup")
+
+st.info("Tap the ▶️ in the top-left to navigate to other pages")
 
 team_name = st.selectbox(
     "Team",

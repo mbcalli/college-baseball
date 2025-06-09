@@ -30,7 +30,7 @@ def value_to_string(value):
     if value > 1: return f"{value:0.2f}"
     return f"{value:0.3f}"
 
-def get_batter_df(player_name: str, silver_adv_batting: pd.DataFrame, bronze_adv_batting: pd.DataFrame) -> pd.DataFrame:
+def get_adv_batter_df(player_name: str, silver_adv_batting: pd.DataFrame, bronze_adv_batting: pd.DataFrame) -> pd.DataFrame:
 
     player_processed = silver_adv_batting[silver_adv_batting["name"] == player_name]
     player_processed = player_processed.drop(columns=["id", "name", "team"]).T.reset_index()
@@ -86,9 +86,73 @@ def get_batter_df(player_name: str, silver_adv_batting: pd.DataFrame, bronze_adv
 
     return player_df
 
-def get_player_batting_figure(player_name: str, silver_adv_batting: pd.DataFrame, bronze_adv_batting: pd.DataFrame):
+def get_std_batter_df(player_name: str, silver_std_batting: pd.DataFrame, bronze_std_batting: pd.DataFrame) -> pd.DataFrame:
 
-    player_df = get_batter_df(player_name, silver_adv_batting, bronze_adv_batting)
+    player_processed = silver_std_batting[silver_std_batting["name"] == player_name]
+    player_processed = player_processed.drop(columns=["id", "name", "team"]).T.reset_index()
+    player_processed.columns = ["stat", "perc"]
+    player_processed["stat"] = [
+        "G",
+        "AB",
+        "PA",
+        "H",
+        "1B",
+        "2B",
+        "3B",
+        "HR",
+        "R",
+        "RBI",
+        "BB",
+        "SO",
+        "HBP",
+        "SF",
+        "SH",
+        "GDP",
+        "SB",
+        "CS",
+        "AVG"
+    ]
+
+    player_raw = bronze_std_batting[bronze_std_batting["name"] == player_name]
+    player_raw = player_raw.drop(columns=["id", "name", "team", "age", "alt_name"]).T.reset_index()
+    player_raw.columns = ["stat", "value"]
+    player_raw["stat"] = [
+        "G",
+        "AB",
+        "PA",
+        "H",
+        "1B",
+        "2B",
+        "3B",
+        "HR",
+        "R",
+        "RBI",
+        "BB",
+        "SO",
+        "HBP",
+        "SF",
+        "SH",
+        "GDP",
+        "SB",
+        "CS",
+        "AVG"
+    ]
+
+    player_df = pd.merge(left=player_processed, right=player_raw, on="stat")
+
+    # player_df["color"] = player_df["perc"].apply(perc_to_color)
+    player_df["color"] = player_df["perc"].apply(perc_to_pastel_color)
+    player_df["value_str"] = player_df["value"].apply(value_to_string)
+    player_df = player_df.iloc[::-1]
+
+    return player_df
+
+def get_player_batting_figure(player_name: str, silver_table: pd.DataFrame, bronze_table: pd.DataFrame, is_advanced: bool):
+
+    if is_advanced:
+        player_df = get_adv_batter_df(player_name, silver_table, bronze_table)
+    else:
+        player_df = get_std_batter_df(player_name, silver_table, bronze_table)
 
     fig = make_subplots(
         rows=1,
@@ -175,7 +239,7 @@ def get_player_batting_figure(player_name: str, silver_adv_batting: pd.DataFrame
 
     return fig
 
-def get_pitcher_df(player_name: str, silver_adv_pitching: pd.DataFrame, bronze_adv_pitching: pd.DataFrame) -> pd.DataFrame:
+def get_adv_pitcher_df(player_name: str, silver_adv_pitching: pd.DataFrame, bronze_adv_pitching: pd.DataFrame) -> pd.DataFrame:
 
     player_processed = silver_adv_pitching[silver_adv_pitching["name"] == player_name]
     player_processed = player_processed.drop(columns=["id", "name", "team"]).T.reset_index()
@@ -229,10 +293,75 @@ def get_pitcher_df(player_name: str, silver_adv_pitching: pd.DataFrame, bronze_a
 
     return player_df
 
-def get_player_pitching_figure(player_name: str, silver_adv_pitching: pd.DataFrame, bronze_adv_pitching: pd.DataFrame):
+def get_std_pitcher_df(player_name: str, silver_std_pitching: pd.DataFrame, bronze_std_pitching: pd.DataFrame) -> pd.DataFrame:
 
-    player_df = get_pitcher_df(player_name, silver_adv_pitching, bronze_adv_pitching)
+    player_processed = silver_std_pitching[silver_std_pitching["name"] == player_name]
+    player_processed = player_processed.drop(columns=["id", "name", "team"]).T.reset_index()
+    player_processed.columns = ["stat", "perc"]
+    player_processed["stat"] = [
+        "W",
+        "L",
+        "ERA",
+        "G",
+        "GS",
+        "CG",
+        "ShO",
+        "SV",
+        "IP",
+        "TBF",
+        "H",
+        "R",
+        "ER",
+        "HR",
+        "BB",
+        "HBP",
+        "WP",
+        "BK",
+        "SO",
+    ]
 
+    player_raw = bronze_std_pitching[bronze_std_pitching["name"] == player_name]
+    player_raw = player_raw.drop(columns=["id", "name", "team", "age", "alt_name"]).T.reset_index()
+    player_raw.columns = ["stat", "value"]
+    player_raw["stat"] = [
+        "W",
+        "L",
+        "ERA",
+        "G",
+        "GS",
+        "CG",
+        "ShO",
+        "SV",
+        "IP",
+        "TBF",
+        "H",
+        "R",
+        "ER",
+        "HR",
+        "BB",
+        "HBP",
+        "WP",
+        "BK",
+        "SO",
+    ]
+
+    player_df = pd.merge(left=player_processed, right=player_raw, on="stat")
+
+
+    # player_df["color"] = player_df["perc"].apply(perc_to_color)
+    player_df["color"] = player_df["perc"].apply(perc_to_pastel_color)
+    player_df["value_str"] = player_df["value"].apply(value_to_string)
+    player_df = player_df.iloc[::-1]
+
+    return player_df
+
+def get_player_pitching_figure(player_name: str, silver_table: pd.DataFrame, bronze_table: pd.DataFrame, is_advanced: bool):
+
+    if is_advanced:
+            player_df = get_adv_pitcher_df(player_name, silver_table, bronze_table)
+    else:
+        player_df = get_std_pitcher_df(player_name, silver_table, bronze_table)
+        
     fig = make_subplots(
         rows=1,
         cols=2,

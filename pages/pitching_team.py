@@ -9,7 +9,9 @@ import json
 with open("static/pitchers.json", "r") as file:
     pitchers = json.load(file)
 
-st.title("2025 College Baseball Pitching Stats")
+st.title("2025 Team Bullpen")
+
+st.info("Tap the ▶️ in the top-left to navigate to other pages")
 
 team_name = st.selectbox(
     "Team",

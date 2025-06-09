@@ -14,8 +14,8 @@ data = data.drop(columns=["MLBAMID"])
 # Rename columns to fit table declaration
 data.columns = ["name", "team", "age", "w", "l", "era", "g", "gs", "cg", "sho", "sv", "ip", "tbf", "h", "r", "er", "hr", "bb", "hbp", "wp", "bk", "so", "alt_name", "id"]
 
-data.to_sql("bronze_adv_pitching", connection, if_exists="replace", index=False)
+data.to_sql("bronze_std_pitching", connection, if_exists="replace", index=False)
 
 connection.close()
 
-print(f"Table 'bronze_adv_pitching' replaced with new data. {len(data)} records added.")
+print(f"Table 'bronze_std_pitching' replaced with new data. {len(data)} records added.")
