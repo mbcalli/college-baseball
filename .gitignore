@@ -1,9 +1,73 @@
+
+# Build / packaging
 build/
 dist/
-__pycache__/
 *.egg-info
+
+# Python virtual environments
 .venv/
 venv/
-scratch/**
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+
+# Project metadata and lock files (don't ignore lockfiles you want to track)
 uv.lock
 pyproject.toml
+
+# Environment files
+.env
+.env.*
+.env.local
+
+# Database files
+*.db
+*.sqlite3
+baseball.db
+
+# Logs and reports
+*.log
+.pytest_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Node / frontend
+node_modules/
+/frontend/node_modules/
+/frontend/dist/
+/frontend/.vite/
+/.vite/
+dist/
+
+# Vite cache
+.vite/
+
+# Jupyter
+.ipynb_checkpoints
+
+# Temporary / build artifacts
+*.tmp
+*.bak
+*.orig
+
+# Data uploads (raw uploads are usually large and not committed)
+/data/upload_*
+
+# Ignore environment-specific local scripts
+/scripts/.env
+
+# Compiled extensions
+*.so
+*.dylib

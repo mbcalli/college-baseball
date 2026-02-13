@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+"""Full update: initialize database, load data, and process percentiles."""
+
+import sys
+from pathlib import Path
+
+from college_baseball.config import get_settings
+from college_baseball.database import get_db_context, init_db
+from college_baseball.loaders import DataLoader
+from college_baseball.processors import SilverProcessor
+
+def main() -> None:
+    """Main function."""
+    settings = get_settings()
+    data_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else settings.bronze_dir
+    
+    if not data_dir.exists():
+        print(f"Error: Directory not found: {data_dir}")
+        sys.exit(1)
+    
+    print("=" * 60)
+    print("FULL DATABASE UPDATE")
+    print("=" * 60)
+    
+    # Step 1: Initialize database
+    print("\n[1/3] Initializing database...")
+    init_db()
+    print("✓ Database initialized")
+    
+    # Step 2: Load bronze data
+    print(f"\n[2/3] Loading data from {data_dir}...")
+    with get_db_context() as db:
+        loader = DataLoader(db)
+        load_results = loader.load_all(data_dir)
+    
+    for name, count in load_results.items():
+        print(f"  ✓ {name}: {count} records")
+    
+    # Step 3: Process silver data
+    print("\n[3/3] Processing percentiles...")
+    with get_db_context() as db:
+        processor = SilverProcessor(db)
+        process_results = processor.process_all()
+    
+    for name, count in process_results.items():
+        print(f"  ✓ {name}: {count} records")
+    
+    print("\n" + "=" * 60)
+    print("✓ FULL UPDATE COMPLETED SUCCESSFULLY")
+    print("=" * 60)
+
+
+if __name__ == "__main__":
+    main()

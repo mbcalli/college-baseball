@@ -1,0 +1,36 @@
+.home {
+  text-align: left;
+}
+
+.home h1 {
+  margin-bottom: 1.5rem;
+}
+
+.home h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.home p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.info-box {
+  background: #e3f2fd;
+  padding: 1rem;
+  border-left: 4px solid #2196f3;
+  border-radius: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .home h2 {
+    color: #eee;
+  }
+  
+  .info-box {
+    background: #1a3a52;
+    border-left-color: #64b5f6;
+  }
+}
