@@ -28,10 +28,18 @@ class Settings(BaseSettings):
     api_host: str = Field(default="0.0.0.0", description="API host")
     api_port: int = Field(default=8000, description="API port")
     api_reload: bool = Field(default=False, description="Enable auto-reload in development")
-    cors_origins: list[str] = Field(
-        default=["http://localhost:3000", "http://localhost:5173", "http://localhost:5174"],
-        description="CORS allowed origins",
+    cors_origins_str: str = Field(
+        default="http://localhost:3000,http://localhost:5173,http://localhost:5174",
+        description="CORS allowed origins (comma-separated)",
+        alias="CORS_ORIGINS",
     )
+    
+    @property
+    def cors_origins(self) -> list[str]:
+        """Parse CORS origins from comma-separated string or return wildcard."""
+        if self.cors_origins_str == "*":
+            return ["*"]
+        return [origin.strip() for origin in self.cors_origins_str.split(",") if origin.strip()]
 
     # Data paths
     data_dir: Path = Field(default=Path("data"), description="Data directory")

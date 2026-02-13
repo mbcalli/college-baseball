@@ -37,6 +37,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 settings = get_settings()
+logger.info(f"CORS origins configured: {settings.cors_origins}")
 
 # Create FastAPI app
 app = FastAPI(
@@ -46,10 +47,11 @@ app = FastAPI(
 )
 
 # Add CORS middleware
+logger.info(f"Adding CORS middleware with origins: {settings.cors_origins}")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins,
-    allow_credentials=True,
+    allow_origin_regex="https://.*\.cloudfront\.net|https://d5qhrmztf8nsl\.cloudfront\.net",
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -61,7 +63,7 @@ def get_latest_data_date_batting(db: Session, year: Optional[int] = None):
         # Get max date for specific year
         max_date = db.execute(
             select(func.max(BronzeAdvBatting.data_date))
-            .where(func.strftime('%Y', BronzeAdvBatting.data_date) == str(year))
+            .where(func.extract('year', BronzeAdvBatting.data_date) == year)
         ).scalar()
     else:
         # Get overall max date
@@ -75,7 +77,7 @@ def get_latest_data_date_pitching(db: Session, year: Optional[int] = None):
         # Get max date for specific year
         max_date = db.execute(
             select(func.max(BronzeAdvPitching.data_date))
-            .where(func.strftime('%Y', BronzeAdvPitching.data_date) == str(year))
+            .where(func.extract('year', BronzeAdvPitching.data_date) == year)
         ).scalar()
     else:
         # Get overall max date
@@ -86,18 +88,19 @@ def get_latest_data_date_pitching(db: Session, year: Optional[int] = None):
 def get_available_years(db: Session) -> list[int]:
     """Get list of available years from the data."""
     batting_years = db.execute(
-        select(func.distinct(func.strftime('%Y', BronzeAdvBatting.data_date)))
-        .order_by(func.strftime('%Y', BronzeAdvBatting.data_date).desc())
+        select(func.distinct(func.extract('year', BronzeAdvBatting.data_date)))
+        .order_by(func.extract('year', BronzeAdvBatting.data_date).desc())
     ).scalars().all()
     return [int(year) for year in batting_years if year]
 
 
-@app.on_event("startup")
-def startup_event() -> None:
-    """Initialize database on startup."""
-    logger.info("Initializing database...")
-    init_db()
-    logger.info("Database initialized")
+# Removed startup event for Lambda - database is already initialized
+# @app.on_event("startup")
+# def startup_event() -> None:
+#     """Initialize database on startup."""
+#     logger.info("Initializing database...")
+#     init_db()
+#     logger.info("Database initialized")
 
 
 @app.get("/", response_model=HealthResponse)
@@ -415,3 +418,12 @@ if __name__ == "__main__":
         port=settings.api_port,
         reload=settings.api_reload,
     )
+
+
+# Lambda handler for AWS Lambda deployment
+try:
+    from mangum import Mangum
+    handler = Mangum(app, lifespan="off", api_gateway_base_path="/default")
+except ImportError:
+    # Mangum not installed, skip Lambda handler
+    pass

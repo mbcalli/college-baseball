@@ -71,3 +71,6 @@ dist/
 # Compiled extensions
 *.so
 *.dylib
+
+# Internal docs
+DEPLOYMENT_GUIDE.md

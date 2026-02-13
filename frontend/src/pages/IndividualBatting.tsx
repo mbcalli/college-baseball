@@ -62,11 +62,7 @@ function IndividualBatting() {
           <label>Year</label>
           <select 
             value={selectedYear || ''} 
-            onChange={(e) => {
-              setSelectedYear(parseInt(e.target.value))
-              setSelectedTeam('')
-              setSelectedPlayer('')
-            }}
+            onChange={(e) => setSelectedYear(parseInt(e.target.value))}
           >
             {years.map((year) => (
               <option key={year} value={year}>

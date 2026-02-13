@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 import pandas as pd
+import numpy as np
 from sqlalchemy.orm import Session
 
 from college_baseball.models import (
@@ -16,6 +17,19 @@ from college_baseball.models import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+def clean_numeric_values(df: pd.DataFrame) -> pd.DataFrame:
+    """Replace inf and NaN values with None for proper database handling."""
+    # Replace inf with NaN first
+    df = df.replace([np.inf, -np.inf], np.nan)
+    
+    # Convert to object dtype to allow None values, then replace NaN with None
+    for col in df.columns:
+        if df[col].dtype in ['float64', 'float32', 'int64', 'int32']:
+            df[col] = df[col].astype('object').where(pd.notnull(df[col]), None)
+    
+    return df
 
 
 class DataLoader:
@@ -69,6 +83,9 @@ class DataLoader:
             column_map["alt_name"] = "alt_name"
         
         df = df.rename(columns=column_map)
+        
+        # Clean numeric values (replace inf/NaN with None)
+        df = clean_numeric_values(df)
         
         # Insert new records (no delete - incremental loading)
         records = df.to_dict("records")
@@ -128,6 +145,9 @@ class DataLoader:
         
         df = df.rename(columns=column_map)
         
+        # Clean numeric values (replace inf/NaN with None)
+        df = clean_numeric_values(df)
+        
         # Insert new records (no delete - incremental loading)
         records = df.to_dict("records")
         for record in records:
@@ -173,6 +193,9 @@ class DataLoader:
             column_map["alt_name"] = "alt_name"
         
         df = df.rename(columns=column_map)
+        
+        # Clean numeric values (replace inf/NaN with None)
+        df = clean_numeric_values(df)
         
         # Insert new records (no delete - incremental loading)
         records = df.to_dict("records")
@@ -229,6 +252,9 @@ class DataLoader:
             column_map["alt_name"] = "alt_name"
         
         df = df.rename(columns=column_map)
+        
+        # Clean numeric values (replace inf/NaN with None)
+        df = clean_numeric_values(df)
         
         # Insert new records (no delete - incremental loading)
         records = df.to_dict("records")
