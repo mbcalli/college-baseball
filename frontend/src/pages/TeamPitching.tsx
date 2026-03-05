@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react'
-import { getTeams, getYears, getPlayerPitching, PlayerProfile } from '../api'
+import { getTeams, getYears, getPlayerPitching, getTeamRoster, PlayerProfile } from '../api'
 import StatBar from '../components/StatBar'
+import RadarChart from '../components/RadarChart'
+import Toggle from '../components/Toggle'
+
+// Key pitching stats for radar chart
+const KEY_PITCHING_STATS_STD = ['ERA', 'W', 'SO', 'IP'];
+const KEY_PITCHING_STATS_ADV = ['ERA', 'WHIP', 'K/9', 'FIP'];
 
 function TeamPitching() {
   const [years, setYears] = useState<number[]>([])
@@ -36,9 +42,7 @@ function TeamPitching() {
     
     try {
       // Get all pitchers for the team
-      const yearParam = selectedYear ? `?year=${selectedYear}` : ''
-      const response = await fetch(`http://localhost:8000/api/teams/${selectedTeam}/roster${yearParam}`)
-      const roster = await response.json()
+      const roster = await getTeamRoster(selectedTeam, selectedYear)
       
       // Fetch stats for each pitcher
       const playerData = await Promise.all(
@@ -116,14 +120,13 @@ function TeamPitching() {
         </div>
 
         <div className="select-group">
-          <label>
-            <input 
-              type="checkbox" 
-              checked={isAdvanced} 
-              onChange={(e) => setIsAdvanced(e.target.checked)}
-            />
-            {' '}Advanced Stats
-          </label>
+          <label>Stats Type</label>
+          <Toggle 
+            checked={isAdvanced}
+            onChange={setIsAdvanced}
+            leftLabel="Standard"
+            rightLabel="Advanced"
+          />
         </div>
 
         <button 
@@ -143,21 +146,25 @@ function TeamPitching() {
 
       {profiles.length > 0 && (
         <>
-          <p className="info-box">
-            Showing {profiles.length} pitchers with {minIP}+ innings pitched
-          </p>
-          
           {profiles.map((profile) => (
-            <div key={profile.id} className="card">
-              <h3>{profile.name}</h3>
-              {profile.statistics.slice(0, 5).map((stat) => (
-                <StatBar
-                  key={stat.name}
-                  name={stat.name}
-                  value={stat.formatted_value}
-                  percentile={stat.percentile}
-                />
-              ))}
+            <div key={profile.id}>
+              <RadarChart 
+                statistics={profile.statistics} 
+                keyStats={isAdvanced ? KEY_PITCHING_STATS_ADV : KEY_PITCHING_STATS_STD}
+                playerName={profile.name}
+                team={profile.team}
+              />
+              <div className="card">
+                <h3>{profile.name}</h3>
+                {profile.statistics.slice(0, 5).map((stat) => (
+                  <StatBar
+                    key={stat.name}
+                    name={stat.name}
+                    value={stat.formatted_value}
+                    percentile={stat.percentile}
+                  />
+                ))}
+              </div>
             </div>
           ))}
         </>

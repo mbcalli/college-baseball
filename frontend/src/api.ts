@@ -32,6 +32,15 @@ export interface TeamRoster {
   pitchers: string[];
 }
 
+export interface DataDateInfo {
+  year: number;
+  last_update: string;
+}
+
+export interface DataDatesResponse {
+  years: DataDateInfo[];
+}
+
 export const getTeams = async (year?: number): Promise<string[]> => {
   const response = await api.get('/api/teams', {
     params: year ? { year } : {},
@@ -41,6 +50,11 @@ export const getTeams = async (year?: number): Promise<string[]> => {
 
 export const getYears = async (): Promise<number[]> => {
   const response = await api.get('/api/years');
+  return response.data;
+};
+
+export const getDataDates = async (): Promise<DataDatesResponse> => {
+  const response = await api.get('/api/data-dates');
   return response.data;
 };
 

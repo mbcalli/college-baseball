@@ -7,6 +7,7 @@ from typing import Any, Optional
 
 import pandas as pd
 import numpy as np
+from sqlalchemy import delete
 from sqlalchemy.orm import Session
 
 from college_baseball.models import (
@@ -293,3 +294,66 @@ class DataLoader:
                 results[name] = self.load_std_pitching(path, data_date)
         
         return results
+    
+    def remove_duplicates(self) -> dict[str, int]:
+        """Remove duplicate records keeping only one per (name, team, data_date).
+        
+        For each table, keeps the first record when duplicates are found based on
+        (name, team, data_date) combination.
+        
+        Returns:
+            Dictionary with count of duplicates removed per table.
+        """
+        logger.info("Removing duplicate records from bronze tables")
+        removed_counts = {}
+        
+        tables = [
+            ("bronze_adv_batting", BronzeAdvBatting),
+            ("bronze_std_batting", BronzeStdBatting),
+            ("bronze_adv_pitching", BronzeAdvPitching),
+            ("bronze_std_pitching", BronzeStdPitching),
+        ]
+        
+        for table_name, model in tables:
+            # Get all records as a DataFrame
+            records = self.session.query(model).all()
+            
+            if not records:
+                removed_counts[table_name] = 0
+                continue
+            
+            # Convert to list of dicts for easier processing
+            data = []
+            ids_to_keep = set()
+            
+            for record in records:
+                data.append({
+                    'id': record.id,
+                    'name': record.name,
+                    'team': record.team,
+                    'data_date': record.data_date
+                })
+            
+            df = pd.DataFrame(data)
+            
+            # Sort by id to ensure consistent ordering
+            df = df.sort_values('id')
+            
+            # Keep first occurrence of each (name, team, data_date) combination
+            df_unique = df.drop_duplicates(subset=['name', 'team', 'data_date'], keep='first')
+            
+            ids_to_keep = set(df_unique['id'].tolist())
+            ids_to_remove = [d['id'] for d in data if d['id'] not in ids_to_keep]
+            
+            # Delete duplicate records
+            if ids_to_remove:
+                stmt = delete(model).where(model.id.in_(ids_to_remove))
+                result = self.session.execute(stmt)
+                self.session.commit()
+                removed_counts[table_name] = len(ids_to_remove)
+                logger.info(f"Removed {len(ids_to_remove)} duplicates from {table_name}")
+            else:
+                removed_counts[table_name] = 0
+                logger.info(f"No duplicates found in {table_name}")
+        
+        return removed_counts

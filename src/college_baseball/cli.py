@@ -333,6 +333,33 @@ def load_and_process(
         console.print(f"[bold red]✗ Error loading data: {e}[/bold red]")
         raise typer.Exit(1)
     
+    # Step 2.5: Remove duplicates
+    console.print("[bold yellow]Step 2.5/3: Removing duplicate records...[/bold yellow]")
+    try:
+        with get_db_context() as db:
+            loader = DataLoader(db)
+            dup_results = loader.remove_duplicates()
+            
+            # Display deduplication results
+            table = Table(title="Duplicates Removed")
+            table.add_column("Table", style="cyan")
+            table.add_column("Removed", style="yellow", justify="right")
+            
+            total_removed = 0
+            for table_name, count in dup_results.items():
+                table.add_row(table_name.replace("_", " ").title(), str(count))
+                total_removed += count
+            
+            console.print(table)
+            
+            if total_removed > 0:
+                console.print(f"[bold green]✓ Removed {total_removed} duplicate record(s)[/bold green]\n")
+            else:
+                console.print(f"[bold green]✓ No duplicates found[/bold green]\n")
+    except Exception as e:
+        console.print(f"[bold red]✗ Error removing duplicates: {e}[/bold red]")
+        raise typer.Exit(1)
+    
     # Step 3: Process all dates
     console.print("[bold yellow]Step 3/3: Processing all dates...[/bold yellow]")
     try:

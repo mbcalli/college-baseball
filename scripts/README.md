@@ -27,6 +27,19 @@ This directory contains executable Python scripts that use the `college_baseball
   ```bash
   python scripts/full_update.py [data_directory]
   ```
+  **Note:** Adds to existing data without removing anything.
+
+- **`reset_database.py`**: ⚠️ Drop all tables and reload from scratch
+  ```bash
+  # Single data folder
+  python scripts/reset_database.py data/upload_02_16_2026
+  
+  # Multiple data folders
+  python scripts/reset_database.py data/upload_02_13_2026 data/upload_02_16_2026
+  ```
+  **Warning:** Completely deletes all database tables and data before reloading!
+  Requires typing `YES` to confirm. Use when you need to remove bad data or
+  completely refresh the database.
 
 ### API Server
 

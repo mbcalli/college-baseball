@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react'
 import { getTeams, getYears, getTeamRoster, getPlayerPitching, PlayerProfile } from '../api'
 import StatBar from '../components/StatBar'
+import RadarChart from '../components/RadarChart'
+import Toggle from '../components/Toggle'
+
+// Key pitching stats for radar chart
+const KEY_PITCHING_STATS_STD = ['ERA', 'W', 'SO', 'IP'];
+const KEY_PITCHING_STATS_ADV = ['ERA', 'WHIP', 'K/9', 'FIP'];
 
 function IndividualPitching() {
   const [years, setYears] = useState<number[]>([])
@@ -108,14 +114,13 @@ function IndividualPitching() {
         </div>
 
         <div className="select-group">
-          <label>
-            <input 
-              type="checkbox" 
-              checked={isAdvanced} 
-              onChange={(e) => setIsAdvanced(e.target.checked)}
-            />
-            {' '}Advanced Stats
-          </label>
+          <label>Stats Type</label>
+          <Toggle 
+            checked={isAdvanced}
+            onChange={setIsAdvanced}
+            leftLabel="Standard"
+            rightLabel="Advanced"
+          />
         </div>
 
         <button 
@@ -134,21 +139,27 @@ function IndividualPitching() {
       )}
 
       {profile && (
-        <div className="card">
-          <h2>{profile.name} - {profile.team}</h2>
-          <p className="info-box">
-            National percentiles shown. 99 = 99th percentile (GREAT)
-          </p>
+        <>
+          <RadarChart 
+            statistics={profile.statistics} 
+            keyStats={isAdvanced ? KEY_PITCHING_STATS_ADV : KEY_PITCHING_STATS_STD}
+            playerName={profile.name}
+            team={profile.team}
+          />
           
-          {profile.statistics.map((stat) => (
-            <StatBar
-              key={stat.name}
-              name={stat.name}
-              value={stat.formatted_value}
-              percentile={stat.percentile}
-            />
-          ))}
-        </div>
+          <div className="card">
+            <h2>{profile.name} - {profile.team}</h2>
+            
+            {profile.statistics.map((stat) => (
+              <StatBar
+                key={stat.name}
+                name={stat.name}
+                value={stat.formatted_value}
+                percentile={stat.percentile}
+              />
+            ))}
+          </div>
+        </>
       )}
     </div>
   )

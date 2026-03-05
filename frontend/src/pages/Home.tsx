@@ -1,18 +1,31 @@
+import DataStatusTerminal from '../components/DataStatusTerminal'
 import './Home.css'
 
 function Home() {
   return (
     <div className="home">
-      <h1>2026 College Baseball Statistics</h1>
-      
+      <h1>College Baseball Stats Explorer</h1>
+
       <div className="card">
-        <p className="info-box">
-          Use the navigation menu to explore individual player statistics or compare team rosters.
+        <h2>Data Freshness</h2>
+        <DataStatusTerminal />
+      </div>
+
+      <div className="card">
+        <h2>About</h2>
+        <p>
+          This is a lightweight tool to explore and compare college baseball statistics.
+          It provides insights into player performance using percentiles, allowing you to see how players stack up against their peers.
+          Data from 2025 is taken from after the season; 2026 is updated throughout the season as stats become available.
+        </p>
+        
+        <p>
+          Created by Matt Callicott, a baseball fan and data scientist.
         </p>
       </div>
 
       <div className="card">
-        <h2>About Percentiles</h2>
+        <h2>Percentiles</h2>
         <p>
           The charts show <strong>percentiles</strong> of key statistics for each player. 
           Percentiles help understand how good a player is compared to others. For example, 

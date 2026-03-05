@@ -368,12 +368,53 @@ class SilverProcessor:
         return len(df)
 
     def process_all(self, data_date: Optional[datetime] = None) -> dict[str, int]:
-        """Process all bronze data into silver layer."""
+        """Process all bronze data into silver layer.
+        
+        If data_date is None, processes all unique data_dates found in bronze tables.
+        If data_date is provided, only processes that specific date.
+        """
         results = {}
         
-        results["adv_batting"] = self.process_adv_batting(data_date)
-        results["std_batting"] = self.process_std_batting(data_date)
-        results["adv_pitching"] = self.process_adv_pitching(data_date)
-        results["std_pitching"] = self.process_std_pitching(data_date)
+        if data_date is not None:
+            # Process specific date
+            results["adv_batting"] = self.process_adv_batting(data_date)
+            results["std_batting"] = self.process_std_batting(data_date)
+            results["adv_pitching"] = self.process_adv_pitching(data_date)
+            results["std_pitching"] = self.process_std_pitching(data_date)
+        else:
+            # Get all unique data_dates from bronze tables
+            dates_from_tables = []
+            
+            # Get unique dates from each bronze table
+            for model in [BronzeAdvBatting, BronzeStdBatting, BronzeAdvPitching, BronzeStdPitching]:
+                dates = self.session.execute(
+                    select(func.distinct(model.data_date))
+                ).scalars().all()
+                dates_from_tables.extend(dates)
+            
+            # Get unique dates and sort them
+            unique_dates = sorted(set(ensure_datetime(d) for d in dates_from_tables))
+            
+            if not unique_dates:
+                logger.warning("No bronze data found to process")
+                return {
+                    "adv_batting": 0,
+                    "std_batting": 0,
+                    "adv_pitching": 0,
+                    "std_pitching": 0,
+                }
+            
+            logger.info(f"Processing percentiles for {len(unique_dates)} unique dates")
+            
+            # Process each date
+            total_counts = {"adv_batting": 0, "std_batting": 0, "adv_pitching": 0, "std_pitching": 0}
+            for date in unique_dates:
+                logger.info(f"Processing data for {date.strftime('%Y-%m-%d')}")
+                total_counts["adv_batting"] += self.process_adv_batting(date)
+                total_counts["std_batting"] += self.process_std_batting(date)
+                total_counts["adv_pitching"] += self.process_adv_pitching(date)
+                total_counts["std_pitching"] += self.process_std_pitching(date)
+            
+            results = total_counts
         
         return results

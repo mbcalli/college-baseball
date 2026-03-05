@@ -28,6 +28,15 @@ def init_db() -> None:
     Base.metadata.create_all(bind=engine)
 
 
+def drop_all_tables() -> None:
+    """Drop all tables in the database.
+    
+    WARNING: This will delete ALL data in the database!
+    Use with caution, especially in production.
+    """
+    Base.metadata.drop_all(bind=engine)
+
+
 def get_db() -> Generator[Session, None, None]:
     """Dependency for getting database session."""
     db = SessionLocal()

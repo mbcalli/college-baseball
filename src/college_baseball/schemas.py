@@ -71,6 +71,19 @@ class MetricsResponse(BaseModel):
     metrics: dict[str, MetricDefinition]
 
 
+class DataDateInfo(BaseModel):
+    """Data date information for a specific year."""
+
+    year: int
+    last_update: str = Field(..., description="Last update date in YYYY-MM-DD format")
+
+
+class DataDatesResponse(BaseModel):
+    """Response containing last update dates for all years."""
+
+    years: list[DataDateInfo]
+
+
 class HealthResponse(BaseModel):
     """API health check response."""
 

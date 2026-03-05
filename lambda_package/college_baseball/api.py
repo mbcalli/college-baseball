@@ -22,6 +22,8 @@ from college_baseball.models import (
     SilverStdPitching,
 )
 from college_baseball.schemas import (
+    DataDateInfo,
+    DataDatesResponse,
     ErrorResponse,
     HealthResponse,
     MetricDefinition,
@@ -50,7 +52,7 @@ app = FastAPI(
 logger.info(f"Adding CORS middleware with origins: {settings.cors_origins}")
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex="https://.*\.cloudfront\.net|https://d5qhrmztf8nsl\.cloudfront\.net",
+    allow_origins=settings.cors_origins,
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -143,6 +145,28 @@ def get_teams(
 def get_years(db: Session = Depends(get_db)) -> list[int]:
     """Get list of available years in the data."""
     return get_available_years(db)
+
+
+@app.get("/api/data-dates", response_model=DataDatesResponse)
+def get_data_dates(db: Session = Depends(get_db)) -> DataDatesResponse:
+    """Get last update date for each available year."""
+    years = get_available_years(db)
+    year_info = []
+    
+    for year in years:
+        # Get max date for this year from batting data
+        max_date = db.execute(
+            select(func.max(BronzeAdvBatting.data_date))
+            .where(func.extract('year', BronzeAdvBatting.data_date) == year)
+        ).scalar()
+        
+        if max_date:
+            year_info.append(DataDateInfo(
+                year=year,
+                last_update=max_date.strftime('%Y-%m-%d')
+            ))
+    
+    return DataDatesResponse(years=year_info)
 
 
 @app.get("/api/teams/{team}/roster", response_model=TeamRoster)

@@ -30,15 +30,27 @@ class Settings(BaseSettings):
     api_reload: bool = Field(default=False, description="Enable auto-reload in development")
     cors_origins_str: str = Field(
         default="http://localhost:3000,http://localhost:5173,http://localhost:5174",
-        description="CORS allowed origins (comma-separated)",
+        description="CORS allowed origins (comma-separated or JSON array)",
         alias="CORS_ORIGINS",
     )
     
     @property
     def cors_origins(self) -> list[str]:
-        """Parse CORS origins from comma-separated string or return wildcard."""
+        """Parse CORS origins from comma-separated string, JSON array, or return wildcard."""
+        import json
+        
         if self.cors_origins_str == "*":
             return ["*"]
+        
+        # Try parsing as JSON array first
+        if self.cors_origins_str.startswith("["):
+            try:
+                origins = json.loads(self.cors_origins_str)
+                return [origin.strip() for origin in origins if origin.strip()]
+            except json.JSONDecodeError:
+                pass
+        
+        # Fall back to comma-separated
         return [origin.strip() for origin in self.cors_origins_str.split(",") if origin.strip()]
 
     # Data paths
